@@ -2,18 +2,77 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["deno"]
-  output = "../generated/client"
+  output          = "../generated/client"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("EXTERNAL_DATABASE_URL")
 }
 
 model Dinosaur {
-  id          Int     @id @default(autoincrement())
-  name        String  @unique
+  id          Int    @id @default(autoincrement())
+  name        String @unique
   description String
+}
+
+// mock store models
+
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  email     String   @unique
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  carts     Cart[]
+  orders    Order[]
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  price       Float
+  createdAt   DateTime @default(now())
+}
+
+// cart_product through table
+model CartItem {
+  id        Int      @id @default(autoincrement())
+  productId Int      @unique
+  cart      Cart     @relation(fields: [cartId], references: [id])
+  cartId    Int
+  createdAt DateTime @default(now())
+}
+
+model Cart {
+  id         Int        @id @default(autoincrement())
+  cartItems  CartItem[]
+  totalPrice Float?
+  createdAt  DateTime   @default(now())
+  User       User?      @relation(fields: [userId], references: [id])
+  userId     Int?
+}
+
+model Order {
+  id        Int      @id @default(autoincrement())
+  status    Status
+  cartId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  createdAt DateTime @default(now())
+}
+
+enum Status {
+  DELIVERED
+  SHIPPED
+  PENDING
 }
