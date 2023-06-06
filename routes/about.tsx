@@ -1,7 +1,6 @@
 // routes/about.tsx
 
 import { Handlers } from '$fresh/server.ts'
-console.log(db)
 export const handler: Handlers = {
   async GET(_req, ctx) {
     const resp = await ctx.render()

@@ -17,3 +17,38 @@ model Dinosaur {
   name        String  @unique
   description String
 }
+
+// mock store models
+
+
+model User {
+  id  Int @id @default(autoincrement())
+  username String @unique
+  email String @unique
+  role Role @default(USER)
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Product {
+  id Int @id @default(autoincrement())
+  name String 
+  description String?
+  price Float
+}
+
+// cart_product through table
+model CartItem {
+  id Int @id @default(autoincrement())
+  ProductId Int @unique
+  CartId Int @unique
+
+}
+
+model Cart {
+  id Int @id @default(autoincrement())
+  CartItems CartItem[]
+}
