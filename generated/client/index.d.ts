@@ -3,7 +3,7 @@
  * Client
 **/
 
-import * as runtime from './runtime/data-proxy';
+import * as runtime from './runtime/library';
 type UnwrapPromise<P extends any> = P extends Promise<infer R> ? R : P
 type UnwrapTuple<Tuple extends readonly unknown[]> = {
   [K in keyof Tuple]: K extends `${number}` ? Tuple[K] extends Prisma.PrismaPromise<infer X> ? X : UnwrapPromise<Tuple[K]> : UnwrapPromise<Tuple[K]>
@@ -11,16 +11,6 @@ type UnwrapTuple<Tuple extends readonly unknown[]> = {
 
 export type PrismaPromise<T> = runtime.Types.Public.PrismaPromise<T>
 
-
-/**
- * Model Dinosaur
- * 
- */
-export type Dinosaur = {
-  id: number
-  name: string
-  description: string
-}
 
 /**
  * Model User
@@ -32,6 +22,9 @@ export type User = {
   email: string
   role: Role
   createdAt: Date
+  address: string | null
+  password: string | null
+  phoneNumber: string | null
 }
 
 /**
@@ -109,8 +102,8 @@ export type Status = (typeof Status)[keyof typeof Status]
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more Dinosaurs
- * const dinosaurs = await prisma.dinosaur.findMany()
+ * // Fetch zero or more Users
+ * const users = await prisma.user.findMany()
  * ```
  *
  * 
@@ -130,8 +123,8 @@ export class PrismaClient<
    * @example
    * ```
    * const prisma = new PrismaClient()
-   * // Fetch zero or more Dinosaurs
-   * const dinosaurs = await prisma.dinosaur.findMany()
+   * // Fetch zero or more Users
+   * const users = await prisma.user.findMany()
    * ```
    *
    * 
@@ -220,16 +213,6 @@ export class PrismaClient<
   $transaction<R>(fn: (prisma: Omit<this, "$connect" | "$disconnect" | "$on" | "$transaction" | "$use">) => Promise<R>, options?: { maxWait?: number, timeout?: number, isolationLevel?: Prisma.TransactionIsolationLevel }): Promise<R>
 
       /**
-   * `prisma.dinosaur`: Exposes CRUD operations for the **Dinosaur** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Dinosaurs
-    * const dinosaurs = await prisma.dinosaur.findMany()
-    * ```
-    */
-  get dinosaur(): Prisma.DinosaurDelegate<GlobalReject>;
-
-  /**
    * `prisma.user`: Exposes CRUD operations for the **User** model.
     * Example usage:
     * ```ts
@@ -747,7 +730,6 @@ export namespace Prisma {
 
 
   export const ModelName: {
-    Dinosaur: 'Dinosaur',
     User: 'User',
     Product: 'Product',
     CartItem: 'CartItem',
@@ -1006,906 +988,6 @@ export namespace Prisma {
    */
 
   /**
-   * Model Dinosaur
-   */
-
-
-  export type AggregateDinosaur = {
-    _count: DinosaurCountAggregateOutputType | null
-    _avg: DinosaurAvgAggregateOutputType | null
-    _sum: DinosaurSumAggregateOutputType | null
-    _min: DinosaurMinAggregateOutputType | null
-    _max: DinosaurMaxAggregateOutputType | null
-  }
-
-  export type DinosaurAvgAggregateOutputType = {
-    id: number | null
-  }
-
-  export type DinosaurSumAggregateOutputType = {
-    id: number | null
-  }
-
-  export type DinosaurMinAggregateOutputType = {
-    id: number | null
-    name: string | null
-    description: string | null
-  }
-
-  export type DinosaurMaxAggregateOutputType = {
-    id: number | null
-    name: string | null
-    description: string | null
-  }
-
-  export type DinosaurCountAggregateOutputType = {
-    id: number
-    name: number
-    description: number
-    _all: number
-  }
-
-
-  export type DinosaurAvgAggregateInputType = {
-    id?: true
-  }
-
-  export type DinosaurSumAggregateInputType = {
-    id?: true
-  }
-
-  export type DinosaurMinAggregateInputType = {
-    id?: true
-    name?: true
-    description?: true
-  }
-
-  export type DinosaurMaxAggregateInputType = {
-    id?: true
-    name?: true
-    description?: true
-  }
-
-  export type DinosaurCountAggregateInputType = {
-    id?: true
-    name?: true
-    description?: true
-    _all?: true
-  }
-
-  export type DinosaurAggregateArgs = {
-    /**
-     * Filter which Dinosaur to aggregate.
-     */
-    where?: DinosaurWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Dinosaurs to fetch.
-     */
-    orderBy?: Enumerable<DinosaurOrderByWithRelationInput>
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: DinosaurWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Dinosaurs from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Dinosaurs.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Dinosaurs
-    **/
-    _count?: true | DinosaurCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: DinosaurAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: DinosaurSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: DinosaurMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: DinosaurMaxAggregateInputType
-  }
-
-  export type GetDinosaurAggregateType<T extends DinosaurAggregateArgs> = {
-        [P in keyof T & keyof AggregateDinosaur]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateDinosaur[P]>
-      : GetScalarType<T[P], AggregateDinosaur[P]>
-  }
-
-
-
-
-  export type DinosaurGroupByArgs = {
-    where?: DinosaurWhereInput
-    orderBy?: Enumerable<DinosaurOrderByWithAggregationInput>
-    by: DinosaurScalarFieldEnum[]
-    having?: DinosaurScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: DinosaurCountAggregateInputType | true
-    _avg?: DinosaurAvgAggregateInputType
-    _sum?: DinosaurSumAggregateInputType
-    _min?: DinosaurMinAggregateInputType
-    _max?: DinosaurMaxAggregateInputType
-  }
-
-
-  export type DinosaurGroupByOutputType = {
-    id: number
-    name: string
-    description: string
-    _count: DinosaurCountAggregateOutputType | null
-    _avg: DinosaurAvgAggregateOutputType | null
-    _sum: DinosaurSumAggregateOutputType | null
-    _min: DinosaurMinAggregateOutputType | null
-    _max: DinosaurMaxAggregateOutputType | null
-  }
-
-  type GetDinosaurGroupByPayload<T extends DinosaurGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickArray<DinosaurGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof DinosaurGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], DinosaurGroupByOutputType[P]>
-            : GetScalarType<T[P], DinosaurGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type DinosaurSelect = {
-    id?: boolean
-    name?: boolean
-    description?: boolean
-  }
-
-
-  export type DinosaurGetPayload<S extends boolean | null | undefined | DinosaurArgs> =
-    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
-    S extends true ? Dinosaur :
-    S extends undefined ? never :
-    S extends { include: any } & (DinosaurArgs | DinosaurFindManyArgs)
-    ? Dinosaur 
-    : S extends { select: any } & (DinosaurArgs | DinosaurFindManyArgs)
-      ? {
-    [P in TruthyKeys<S['select']>]:
-    P extends keyof Dinosaur ? Dinosaur[P] : never
-  } 
-      : Dinosaur
-
-
-  type DinosaurCountArgs = 
-    Omit<DinosaurFindManyArgs, 'select' | 'include'> & {
-      select?: DinosaurCountAggregateInputType | true
-    }
-
-  export interface DinosaurDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
-
-    /**
-     * Find zero or one Dinosaur that matches the filter.
-     * @param {DinosaurFindUniqueArgs} args - Arguments to find a Dinosaur
-     * @example
-     * // Get one Dinosaur
-     * const dinosaur = await prisma.dinosaur.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findUnique<T extends DinosaurFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
-      args: SelectSubset<T, DinosaurFindUniqueArgs>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'Dinosaur'> extends True ? Prisma__DinosaurClient<DinosaurGetPayload<T>> : Prisma__DinosaurClient<DinosaurGetPayload<T> | null, null>
-
-    /**
-     * Find one Dinosaur that matches the filter or throw an error  with `error.code='P2025'` 
-     *     if no matches were found.
-     * @param {DinosaurFindUniqueOrThrowArgs} args - Arguments to find a Dinosaur
-     * @example
-     * // Get one Dinosaur
-     * const dinosaur = await prisma.dinosaur.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findUniqueOrThrow<T extends DinosaurFindUniqueOrThrowArgs>(
-      args?: SelectSubset<T, DinosaurFindUniqueOrThrowArgs>
-    ): Prisma__DinosaurClient<DinosaurGetPayload<T>>
-
-    /**
-     * Find the first Dinosaur that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DinosaurFindFirstArgs} args - Arguments to find a Dinosaur
-     * @example
-     * // Get one Dinosaur
-     * const dinosaur = await prisma.dinosaur.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findFirst<T extends DinosaurFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
-      args?: SelectSubset<T, DinosaurFindFirstArgs>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'Dinosaur'> extends True ? Prisma__DinosaurClient<DinosaurGetPayload<T>> : Prisma__DinosaurClient<DinosaurGetPayload<T> | null, null>
-
-    /**
-     * Find the first Dinosaur that matches the filter or
-     * throw `NotFoundError` if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DinosaurFindFirstOrThrowArgs} args - Arguments to find a Dinosaur
-     * @example
-     * // Get one Dinosaur
-     * const dinosaur = await prisma.dinosaur.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findFirstOrThrow<T extends DinosaurFindFirstOrThrowArgs>(
-      args?: SelectSubset<T, DinosaurFindFirstOrThrowArgs>
-    ): Prisma__DinosaurClient<DinosaurGetPayload<T>>
-
-    /**
-     * Find zero or more Dinosaurs that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DinosaurFindManyArgs=} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Dinosaurs
-     * const dinosaurs = await prisma.dinosaur.findMany()
-     * 
-     * // Get first 10 Dinosaurs
-     * const dinosaurs = await prisma.dinosaur.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const dinosaurWithIdOnly = await prisma.dinosaur.findMany({ select: { id: true } })
-     * 
-    **/
-    findMany<T extends DinosaurFindManyArgs>(
-      args?: SelectSubset<T, DinosaurFindManyArgs>
-    ): Prisma.PrismaPromise<Array<DinosaurGetPayload<T>>>
-
-    /**
-     * Create a Dinosaur.
-     * @param {DinosaurCreateArgs} args - Arguments to create a Dinosaur.
-     * @example
-     * // Create one Dinosaur
-     * const Dinosaur = await prisma.dinosaur.create({
-     *   data: {
-     *     // ... data to create a Dinosaur
-     *   }
-     * })
-     * 
-    **/
-    create<T extends DinosaurCreateArgs>(
-      args: SelectSubset<T, DinosaurCreateArgs>
-    ): Prisma__DinosaurClient<DinosaurGetPayload<T>>
-
-    /**
-     * Create many Dinosaurs.
-     *     @param {DinosaurCreateManyArgs} args - Arguments to create many Dinosaurs.
-     *     @example
-     *     // Create many Dinosaurs
-     *     const dinosaur = await prisma.dinosaur.createMany({
-     *       data: {
-     *         // ... provide data here
-     *       }
-     *     })
-     *     
-    **/
-    createMany<T extends DinosaurCreateManyArgs>(
-      args?: SelectSubset<T, DinosaurCreateManyArgs>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Delete a Dinosaur.
-     * @param {DinosaurDeleteArgs} args - Arguments to delete one Dinosaur.
-     * @example
-     * // Delete one Dinosaur
-     * const Dinosaur = await prisma.dinosaur.delete({
-     *   where: {
-     *     // ... filter to delete one Dinosaur
-     *   }
-     * })
-     * 
-    **/
-    delete<T extends DinosaurDeleteArgs>(
-      args: SelectSubset<T, DinosaurDeleteArgs>
-    ): Prisma__DinosaurClient<DinosaurGetPayload<T>>
-
-    /**
-     * Update one Dinosaur.
-     * @param {DinosaurUpdateArgs} args - Arguments to update one Dinosaur.
-     * @example
-     * // Update one Dinosaur
-     * const dinosaur = await prisma.dinosaur.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-    **/
-    update<T extends DinosaurUpdateArgs>(
-      args: SelectSubset<T, DinosaurUpdateArgs>
-    ): Prisma__DinosaurClient<DinosaurGetPayload<T>>
-
-    /**
-     * Delete zero or more Dinosaurs.
-     * @param {DinosaurDeleteManyArgs} args - Arguments to filter Dinosaurs to delete.
-     * @example
-     * // Delete a few Dinosaurs
-     * const { count } = await prisma.dinosaur.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-    **/
-    deleteMany<T extends DinosaurDeleteManyArgs>(
-      args?: SelectSubset<T, DinosaurDeleteManyArgs>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Dinosaurs.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DinosaurUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Dinosaurs
-     * const dinosaur = await prisma.dinosaur.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-    **/
-    updateMany<T extends DinosaurUpdateManyArgs>(
-      args: SelectSubset<T, DinosaurUpdateManyArgs>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one Dinosaur.
-     * @param {DinosaurUpsertArgs} args - Arguments to update or create a Dinosaur.
-     * @example
-     * // Update or create a Dinosaur
-     * const dinosaur = await prisma.dinosaur.upsert({
-     *   create: {
-     *     // ... data to create a Dinosaur
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Dinosaur we want to update
-     *   }
-     * })
-    **/
-    upsert<T extends DinosaurUpsertArgs>(
-      args: SelectSubset<T, DinosaurUpsertArgs>
-    ): Prisma__DinosaurClient<DinosaurGetPayload<T>>
-
-    /**
-     * Count the number of Dinosaurs.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DinosaurCountArgs} args - Arguments to filter Dinosaurs to count.
-     * @example
-     * // Count the number of Dinosaurs
-     * const count = await prisma.dinosaur.count({
-     *   where: {
-     *     // ... the filter for the Dinosaurs we want to count
-     *   }
-     * })
-    **/
-    count<T extends DinosaurCountArgs>(
-      args?: Subset<T, DinosaurCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends _Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], DinosaurCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Dinosaur.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DinosaurAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends DinosaurAggregateArgs>(args: Subset<T, DinosaurAggregateArgs>): Prisma.PrismaPromise<GetDinosaurAggregateType<T>>
-
-    /**
-     * Group by Dinosaur.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DinosaurGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends DinosaurGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: DinosaurGroupByArgs['orderBy'] }
-        : { orderBy?: DinosaurGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends TupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, DinosaurGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDinosaurGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Dinosaur.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export class Prisma__DinosaurClient<T, Null = never> implements Prisma.PrismaPromise<T> {
-    private readonly _dmmf;
-    private readonly _queryType;
-    private readonly _rootField;
-    private readonly _clientMethod;
-    private readonly _args;
-    private readonly _dataPath;
-    private readonly _errorFormat;
-    private readonly _measurePerformance?;
-    private _isList;
-    private _callsite;
-    private _requestPromise?;
-    readonly [Symbol.toStringTag]: 'PrismaPromise';
-    constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
-
-
-    private get _document();
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
-  }
-
-
-
-  // Custom InputTypes
-
-  /**
-   * Dinosaur base type for findUnique actions
-   */
-  export type DinosaurFindUniqueArgsBase = {
-    /**
-     * Select specific fields to fetch from the Dinosaur
-     */
-    select?: DinosaurSelect | null
-    /**
-     * Filter, which Dinosaur to fetch.
-     */
-    where: DinosaurWhereUniqueInput
-  }
-
-  /**
-   * Dinosaur findUnique
-   */
-  export interface DinosaurFindUniqueArgs extends DinosaurFindUniqueArgsBase {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
-
-  /**
-   * Dinosaur findUniqueOrThrow
-   */
-  export type DinosaurFindUniqueOrThrowArgs = {
-    /**
-     * Select specific fields to fetch from the Dinosaur
-     */
-    select?: DinosaurSelect | null
-    /**
-     * Filter, which Dinosaur to fetch.
-     */
-    where: DinosaurWhereUniqueInput
-  }
-
-
-  /**
-   * Dinosaur base type for findFirst actions
-   */
-  export type DinosaurFindFirstArgsBase = {
-    /**
-     * Select specific fields to fetch from the Dinosaur
-     */
-    select?: DinosaurSelect | null
-    /**
-     * Filter, which Dinosaur to fetch.
-     */
-    where?: DinosaurWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Dinosaurs to fetch.
-     */
-    orderBy?: Enumerable<DinosaurOrderByWithRelationInput>
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Dinosaurs.
-     */
-    cursor?: DinosaurWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Dinosaurs from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Dinosaurs.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Dinosaurs.
-     */
-    distinct?: Enumerable<DinosaurScalarFieldEnum>
-  }
-
-  /**
-   * Dinosaur findFirst
-   */
-  export interface DinosaurFindFirstArgs extends DinosaurFindFirstArgsBase {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
-
-  /**
-   * Dinosaur findFirstOrThrow
-   */
-  export type DinosaurFindFirstOrThrowArgs = {
-    /**
-     * Select specific fields to fetch from the Dinosaur
-     */
-    select?: DinosaurSelect | null
-    /**
-     * Filter, which Dinosaur to fetch.
-     */
-    where?: DinosaurWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Dinosaurs to fetch.
-     */
-    orderBy?: Enumerable<DinosaurOrderByWithRelationInput>
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Dinosaurs.
-     */
-    cursor?: DinosaurWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Dinosaurs from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Dinosaurs.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Dinosaurs.
-     */
-    distinct?: Enumerable<DinosaurScalarFieldEnum>
-  }
-
-
-  /**
-   * Dinosaur findMany
-   */
-  export type DinosaurFindManyArgs = {
-    /**
-     * Select specific fields to fetch from the Dinosaur
-     */
-    select?: DinosaurSelect | null
-    /**
-     * Filter, which Dinosaurs to fetch.
-     */
-    where?: DinosaurWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Dinosaurs to fetch.
-     */
-    orderBy?: Enumerable<DinosaurOrderByWithRelationInput>
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Dinosaurs.
-     */
-    cursor?: DinosaurWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Dinosaurs from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Dinosaurs.
-     */
-    skip?: number
-    distinct?: Enumerable<DinosaurScalarFieldEnum>
-  }
-
-
-  /**
-   * Dinosaur create
-   */
-  export type DinosaurCreateArgs = {
-    /**
-     * Select specific fields to fetch from the Dinosaur
-     */
-    select?: DinosaurSelect | null
-    /**
-     * The data needed to create a Dinosaur.
-     */
-    data: XOR<DinosaurCreateInput, DinosaurUncheckedCreateInput>
-  }
-
-
-  /**
-   * Dinosaur createMany
-   */
-  export type DinosaurCreateManyArgs = {
-    /**
-     * The data used to create many Dinosaurs.
-     */
-    data: Enumerable<DinosaurCreateManyInput>
-    skipDuplicates?: boolean
-  }
-
-
-  /**
-   * Dinosaur update
-   */
-  export type DinosaurUpdateArgs = {
-    /**
-     * Select specific fields to fetch from the Dinosaur
-     */
-    select?: DinosaurSelect | null
-    /**
-     * The data needed to update a Dinosaur.
-     */
-    data: XOR<DinosaurUpdateInput, DinosaurUncheckedUpdateInput>
-    /**
-     * Choose, which Dinosaur to update.
-     */
-    where: DinosaurWhereUniqueInput
-  }
-
-
-  /**
-   * Dinosaur updateMany
-   */
-  export type DinosaurUpdateManyArgs = {
-    /**
-     * The data used to update Dinosaurs.
-     */
-    data: XOR<DinosaurUpdateManyMutationInput, DinosaurUncheckedUpdateManyInput>
-    /**
-     * Filter which Dinosaurs to update
-     */
-    where?: DinosaurWhereInput
-  }
-
-
-  /**
-   * Dinosaur upsert
-   */
-  export type DinosaurUpsertArgs = {
-    /**
-     * Select specific fields to fetch from the Dinosaur
-     */
-    select?: DinosaurSelect | null
-    /**
-     * The filter to search for the Dinosaur to update in case it exists.
-     */
-    where: DinosaurWhereUniqueInput
-    /**
-     * In case the Dinosaur found by the `where` argument doesn't exist, create a new Dinosaur with this data.
-     */
-    create: XOR<DinosaurCreateInput, DinosaurUncheckedCreateInput>
-    /**
-     * In case the Dinosaur was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<DinosaurUpdateInput, DinosaurUncheckedUpdateInput>
-  }
-
-
-  /**
-   * Dinosaur delete
-   */
-  export type DinosaurDeleteArgs = {
-    /**
-     * Select specific fields to fetch from the Dinosaur
-     */
-    select?: DinosaurSelect | null
-    /**
-     * Filter which Dinosaur to delete.
-     */
-    where: DinosaurWhereUniqueInput
-  }
-
-
-  /**
-   * Dinosaur deleteMany
-   */
-  export type DinosaurDeleteManyArgs = {
-    /**
-     * Filter which Dinosaurs to delete
-     */
-    where?: DinosaurWhereInput
-  }
-
-
-  /**
-   * Dinosaur without action
-   */
-  export type DinosaurArgs = {
-    /**
-     * Select specific fields to fetch from the Dinosaur
-     */
-    select?: DinosaurSelect | null
-  }
-
-
-
-  /**
    * Model User
    */
 
@@ -1932,6 +1014,9 @@ export namespace Prisma {
     email: string | null
     role: Role | null
     createdAt: Date | null
+    address: string | null
+    password: string | null
+    phoneNumber: string | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -1940,6 +1025,9 @@ export namespace Prisma {
     email: string | null
     role: Role | null
     createdAt: Date | null
+    address: string | null
+    password: string | null
+    phoneNumber: string | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -1948,6 +1036,9 @@ export namespace Prisma {
     email: number
     role: number
     createdAt: number
+    address: number
+    password: number
+    phoneNumber: number
     _all: number
   }
 
@@ -1966,6 +1057,9 @@ export namespace Prisma {
     email?: true
     role?: true
     createdAt?: true
+    address?: true
+    password?: true
+    phoneNumber?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -1974,6 +1068,9 @@ export namespace Prisma {
     email?: true
     role?: true
     createdAt?: true
+    address?: true
+    password?: true
+    phoneNumber?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -1982,6 +1079,9 @@ export namespace Prisma {
     email?: true
     role?: true
     createdAt?: true
+    address?: true
+    password?: true
+    phoneNumber?: true
     _all?: true
   }
 
@@ -2078,6 +1178,9 @@ export namespace Prisma {
     email: string
     role: Role
     createdAt: Date
+    address: string | null
+    password: string | null
+    phoneNumber: string | null
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
     _sum: UserSumAggregateOutputType | null
@@ -2105,6 +1208,9 @@ export namespace Prisma {
     email?: boolean
     role?: boolean
     createdAt?: boolean
+    address?: boolean
+    password?: boolean
+    phoneNumber?: boolean
     carts?: boolean | User$cartsArgs
     orders?: boolean | User$ordersArgs
     _count?: boolean | UserCountOutputTypeArgs
@@ -5007,15 +4113,15 @@ export namespace Prisma {
     totalPrice?: boolean
     createdAt?: boolean
     userId?: boolean
-    cartItems?: boolean | Cart$cartItemsArgs
     User?: boolean | UserArgs
+    cartItems?: boolean | Cart$cartItemsArgs
     _count?: boolean | CartCountOutputTypeArgs
   }
 
 
   export type CartInclude = {
-    cartItems?: boolean | Cart$cartItemsArgs
     User?: boolean | UserArgs
+    cartItems?: boolean | Cart$cartItemsArgs
     _count?: boolean | CartCountOutputTypeArgs
   }
 
@@ -5026,15 +4132,15 @@ export namespace Prisma {
     S extends { include: any } & (CartArgs | CartFindManyArgs)
     ? Cart  & {
     [P in TruthyKeys<S['include']>]:
-        P extends 'cartItems' ? Array < CartItemGetPayload<S['include'][P]>>  :
         P extends 'User' ? UserGetPayload<S['include'][P]> | null :
+        P extends 'cartItems' ? Array < CartItemGetPayload<S['include'][P]>>  :
         P extends '_count' ? CartCountOutputTypeGetPayload<S['include'][P]> :  never
   } 
     : S extends { select: any } & (CartArgs | CartFindManyArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
-        P extends 'cartItems' ? Array < CartItemGetPayload<S['select'][P]>>  :
         P extends 'User' ? UserGetPayload<S['select'][P]> | null :
+        P extends 'cartItems' ? Array < CartItemGetPayload<S['select'][P]>>  :
         P extends '_count' ? CartCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof Cart ? Cart[P] : never
   } 
       : Cart
@@ -5407,9 +4513,9 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
     constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
 
-    cartItems<T extends Cart$cartItemsArgs= {}>(args?: Subset<T, Cart$cartItemsArgs>): Prisma.PrismaPromise<Array<CartItemGetPayload<T>>| Null>;
-
     User<T extends UserArgs= {}>(args?: Subset<T, UserArgs>): Prisma__UserClient<UserGetPayload<T> | Null>;
+
+    cartItems<T extends Cart$cartItemsArgs= {}>(args?: Subset<T, Cart$cartItemsArgs>): Prisma.PrismaPromise<Array<CartItemGetPayload<T>>| Null>;
 
     private get _document();
     /**
@@ -6800,15 +5906,6 @@ export namespace Prisma {
   export type CartScalarFieldEnum = (typeof CartScalarFieldEnum)[keyof typeof CartScalarFieldEnum]
 
 
-  export const DinosaurScalarFieldEnum: {
-    id: 'id',
-    name: 'name',
-    description: 'description'
-  };
-
-  export type DinosaurScalarFieldEnum = (typeof DinosaurScalarFieldEnum)[keyof typeof DinosaurScalarFieldEnum]
-
-
   export const OrderScalarFieldEnum: {
     id: 'id',
     status: 'status',
@@ -6862,7 +5959,10 @@ export namespace Prisma {
     username: 'username',
     email: 'email',
     role: 'role',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    address: 'address',
+    password: 'password',
+    phoneNumber: 'phoneNumber'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -6873,46 +5973,6 @@ export namespace Prisma {
    */
 
 
-  export type DinosaurWhereInput = {
-    AND?: Enumerable<DinosaurWhereInput>
-    OR?: Enumerable<DinosaurWhereInput>
-    NOT?: Enumerable<DinosaurWhereInput>
-    id?: IntFilter | number
-    name?: StringFilter | string
-    description?: StringFilter | string
-  }
-
-  export type DinosaurOrderByWithRelationInput = {
-    id?: SortOrder
-    name?: SortOrder
-    description?: SortOrder
-  }
-
-  export type DinosaurWhereUniqueInput = {
-    id?: number
-    name?: string
-  }
-
-  export type DinosaurOrderByWithAggregationInput = {
-    id?: SortOrder
-    name?: SortOrder
-    description?: SortOrder
-    _count?: DinosaurCountOrderByAggregateInput
-    _avg?: DinosaurAvgOrderByAggregateInput
-    _max?: DinosaurMaxOrderByAggregateInput
-    _min?: DinosaurMinOrderByAggregateInput
-    _sum?: DinosaurSumOrderByAggregateInput
-  }
-
-  export type DinosaurScalarWhereWithAggregatesInput = {
-    AND?: Enumerable<DinosaurScalarWhereWithAggregatesInput>
-    OR?: Enumerable<DinosaurScalarWhereWithAggregatesInput>
-    NOT?: Enumerable<DinosaurScalarWhereWithAggregatesInput>
-    id?: IntWithAggregatesFilter | number
-    name?: StringWithAggregatesFilter | string
-    description?: StringWithAggregatesFilter | string
-  }
-
   export type UserWhereInput = {
     AND?: Enumerable<UserWhereInput>
     OR?: Enumerable<UserWhereInput>
@@ -6922,6 +5982,9 @@ export namespace Prisma {
     email?: StringFilter | string
     role?: EnumRoleFilter | Role
     createdAt?: DateTimeFilter | Date | string
+    address?: StringNullableFilter | string | null
+    password?: StringNullableFilter | string | null
+    phoneNumber?: StringNullableFilter | string | null
     carts?: CartListRelationFilter
     orders?: OrderListRelationFilter
   }
@@ -6932,6 +5995,9 @@ export namespace Prisma {
     email?: SortOrder
     role?: SortOrder
     createdAt?: SortOrder
+    address?: SortOrder
+    password?: SortOrder
+    phoneNumber?: SortOrder
     carts?: CartOrderByRelationAggregateInput
     orders?: OrderOrderByRelationAggregateInput
   }
@@ -6948,6 +6014,9 @@ export namespace Prisma {
     email?: SortOrder
     role?: SortOrder
     createdAt?: SortOrder
+    address?: SortOrder
+    password?: SortOrder
+    phoneNumber?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -6964,6 +6033,9 @@ export namespace Prisma {
     email?: StringWithAggregatesFilter | string
     role?: EnumRoleWithAggregatesFilter | Role
     createdAt?: DateTimeWithAggregatesFilter | Date | string
+    address?: StringNullableWithAggregatesFilter | string | null
+    password?: StringNullableWithAggregatesFilter | string | null
+    phoneNumber?: StringNullableWithAggregatesFilter | string | null
   }
 
   export type ProductWhereInput = {
@@ -7067,8 +6139,8 @@ export namespace Prisma {
     totalPrice?: FloatNullableFilter | number | null
     createdAt?: DateTimeFilter | Date | string
     userId?: IntNullableFilter | number | null
-    cartItems?: CartItemListRelationFilter
     User?: XOR<UserRelationFilter, UserWhereInput> | null
+    cartItems?: CartItemListRelationFilter
   }
 
   export type CartOrderByWithRelationInput = {
@@ -7076,8 +6148,8 @@ export namespace Prisma {
     totalPrice?: SortOrder
     createdAt?: SortOrder
     userId?: SortOrder
-    cartItems?: CartItemOrderByRelationAggregateInput
     User?: UserOrderByWithRelationInput
+    cartItems?: CartItemOrderByRelationAggregateInput
   }
 
   export type CartWhereUniqueInput = {
@@ -7155,50 +6227,14 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter | Date | string
   }
 
-  export type DinosaurCreateInput = {
-    name: string
-    description: string
-  }
-
-  export type DinosaurUncheckedCreateInput = {
-    id?: number
-    name: string
-    description: string
-  }
-
-  export type DinosaurUpdateInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type DinosaurUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type DinosaurCreateManyInput = {
-    id?: number
-    name: string
-    description: string
-  }
-
-  export type DinosaurUpdateManyMutationInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type DinosaurUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-  }
-
   export type UserCreateInput = {
     username: string
     email: string
     role?: Role
     createdAt?: Date | string
+    address?: string | null
+    password?: string | null
+    phoneNumber?: string | null
     carts?: CartCreateNestedManyWithoutUserInput
     orders?: OrderCreateNestedManyWithoutUserInput
   }
@@ -7209,6 +6245,9 @@ export namespace Prisma {
     email: string
     role?: Role
     createdAt?: Date | string
+    address?: string | null
+    password?: string | null
+    phoneNumber?: string | null
     carts?: CartUncheckedCreateNestedManyWithoutUserInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
   }
@@ -7218,6 +6257,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     carts?: CartUpdateManyWithoutUserNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
   }
@@ -7228,6 +6270,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     carts?: CartUncheckedUpdateManyWithoutUserNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -7238,6 +6283,9 @@ export namespace Prisma {
     email: string
     role?: Role
     createdAt?: Date | string
+    address?: string | null
+    password?: string | null
+    phoneNumber?: string | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -7245,6 +6293,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -7253,6 +6304,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProductCreateInput = {
@@ -7356,8 +6410,8 @@ export namespace Prisma {
   export type CartCreateInput = {
     totalPrice?: number | null
     createdAt?: Date | string
-    cartItems?: CartItemCreateNestedManyWithoutCartInput
     User?: UserCreateNestedOneWithoutCartsInput
+    cartItems?: CartItemCreateNestedManyWithoutCartInput
   }
 
   export type CartUncheckedCreateInput = {
@@ -7371,8 +6425,8 @@ export namespace Prisma {
   export type CartUpdateInput = {
     totalPrice?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    cartItems?: CartItemUpdateManyWithoutCartNestedInput
     User?: UserUpdateOneWithoutCartsNestedInput
+    cartItems?: CartItemUpdateManyWithoutCartNestedInput
   }
 
   export type CartUncheckedUpdateInput = {
@@ -7480,29 +6534,97 @@ export namespace Prisma {
     not?: NestedStringFilter | string
   }
 
-  export type DinosaurCountOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    description?: SortOrder
+  export type EnumRoleFilter = {
+    equals?: Role
+    in?: Enumerable<Role>
+    notIn?: Enumerable<Role>
+    not?: NestedEnumRoleFilter | Role
   }
 
-  export type DinosaurAvgOrderByAggregateInput = {
+  export type DateTimeFilter = {
+    equals?: Date | string
+    in?: Enumerable<Date> | Enumerable<string> | Date | string
+    notIn?: Enumerable<Date> | Enumerable<string> | Date | string
+    lt?: Date | string
+    lte?: Date | string
+    gt?: Date | string
+    gte?: Date | string
+    not?: NestedDateTimeFilter | Date | string
+  }
+
+  export type StringNullableFilter = {
+    equals?: string | null
+    in?: Enumerable<string> | string | null
+    notIn?: Enumerable<string> | string | null
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
+    contains?: string
+    startsWith?: string
+    endsWith?: string
+    mode?: QueryMode
+    not?: NestedStringNullableFilter | string | null
+  }
+
+  export type CartListRelationFilter = {
+    every?: CartWhereInput
+    some?: CartWhereInput
+    none?: CartWhereInput
+  }
+
+  export type OrderListRelationFilter = {
+    every?: OrderWhereInput
+    some?: OrderWhereInput
+    none?: OrderWhereInput
+  }
+
+  export type CartOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type OrderOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type UserCountOrderByAggregateInput = {
+    id?: SortOrder
+    username?: SortOrder
+    email?: SortOrder
+    role?: SortOrder
+    createdAt?: SortOrder
+    address?: SortOrder
+    password?: SortOrder
+    phoneNumber?: SortOrder
+  }
+
+  export type UserAvgOrderByAggregateInput = {
     id?: SortOrder
   }
 
-  export type DinosaurMaxOrderByAggregateInput = {
+  export type UserMaxOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
-    description?: SortOrder
+    username?: SortOrder
+    email?: SortOrder
+    role?: SortOrder
+    createdAt?: SortOrder
+    address?: SortOrder
+    password?: SortOrder
+    phoneNumber?: SortOrder
   }
 
-  export type DinosaurMinOrderByAggregateInput = {
+  export type UserMinOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
-    description?: SortOrder
+    username?: SortOrder
+    email?: SortOrder
+    role?: SortOrder
+    createdAt?: SortOrder
+    address?: SortOrder
+    password?: SortOrder
+    phoneNumber?: SortOrder
   }
 
-  export type DinosaurSumOrderByAggregateInput = {
+  export type UserSumOrderByAggregateInput = {
     id?: SortOrder
   }
 
@@ -7540,76 +6662,6 @@ export namespace Prisma {
     _max?: NestedStringFilter
   }
 
-  export type EnumRoleFilter = {
-    equals?: Role
-    in?: Enumerable<Role>
-    notIn?: Enumerable<Role>
-    not?: NestedEnumRoleFilter | Role
-  }
-
-  export type DateTimeFilter = {
-    equals?: Date | string
-    in?: Enumerable<Date> | Enumerable<string> | Date | string
-    notIn?: Enumerable<Date> | Enumerable<string> | Date | string
-    lt?: Date | string
-    lte?: Date | string
-    gt?: Date | string
-    gte?: Date | string
-    not?: NestedDateTimeFilter | Date | string
-  }
-
-  export type CartListRelationFilter = {
-    every?: CartWhereInput
-    some?: CartWhereInput
-    none?: CartWhereInput
-  }
-
-  export type OrderListRelationFilter = {
-    every?: OrderWhereInput
-    some?: OrderWhereInput
-    none?: OrderWhereInput
-  }
-
-  export type CartOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type OrderOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type UserCountOrderByAggregateInput = {
-    id?: SortOrder
-    username?: SortOrder
-    email?: SortOrder
-    role?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type UserAvgOrderByAggregateInput = {
-    id?: SortOrder
-  }
-
-  export type UserMaxOrderByAggregateInput = {
-    id?: SortOrder
-    username?: SortOrder
-    email?: SortOrder
-    role?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type UserMinOrderByAggregateInput = {
-    id?: SortOrder
-    username?: SortOrder
-    email?: SortOrder
-    role?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type UserSumOrderByAggregateInput = {
-    id?: SortOrder
-  }
-
   export type EnumRoleWithAggregatesFilter = {
     equals?: Role
     in?: Enumerable<Role>
@@ -7634,7 +6686,7 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter
   }
 
-  export type StringNullableFilter = {
+  export type StringNullableWithAggregatesFilter = {
     equals?: string | null
     in?: Enumerable<string> | string | null
     notIn?: Enumerable<string> | string | null
@@ -7646,7 +6698,10 @@ export namespace Prisma {
     startsWith?: string
     endsWith?: string
     mode?: QueryMode
-    not?: NestedStringNullableFilter | string | null
+    not?: NestedStringNullableWithAggregatesFilter | string | null
+    _count?: NestedIntNullableFilter
+    _min?: NestedStringNullableFilter
+    _max?: NestedStringNullableFilter
   }
 
   export type FloatFilter = {
@@ -7692,24 +6747,6 @@ export namespace Prisma {
   export type ProductSumOrderByAggregateInput = {
     id?: SortOrder
     price?: SortOrder
-  }
-
-  export type StringNullableWithAggregatesFilter = {
-    equals?: string | null
-    in?: Enumerable<string> | string | null
-    notIn?: Enumerable<string> | string | null
-    lt?: string
-    lte?: string
-    gt?: string
-    gte?: string
-    contains?: string
-    startsWith?: string
-    endsWith?: string
-    mode?: QueryMode
-    not?: NestedStringNullableWithAggregatesFilter | string | null
-    _count?: NestedIntNullableFilter
-    _min?: NestedStringNullableFilter
-    _max?: NestedStringNullableFilter
   }
 
   export type FloatWithAggregatesFilter = {
@@ -7788,15 +6825,15 @@ export namespace Prisma {
     not?: NestedIntNullableFilter | number | null
   }
 
+  export type UserRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
   export type CartItemListRelationFilter = {
     every?: CartItemWhereInput
     some?: CartItemWhereInput
     none?: CartItemWhereInput
-  }
-
-  export type UserRelationFilter = {
-    is?: UserWhereInput
-    isNot?: UserWhereInput
   }
 
   export type CartItemOrderByRelationAggregateInput = {
@@ -7921,18 +6958,6 @@ export namespace Prisma {
     _max?: NestedEnumStatusFilter
   }
 
-  export type StringFieldUpdateOperationsInput = {
-    set?: string
-  }
-
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
   export type CartCreateNestedManyWithoutUserInput = {
     create?: XOR<Enumerable<CartCreateWithoutUserInput>, Enumerable<CartUncheckedCreateWithoutUserInput>>
     connectOrCreate?: Enumerable<CartCreateOrConnectWithoutUserInput>
@@ -7961,12 +6986,20 @@ export namespace Prisma {
     connect?: Enumerable<OrderWhereUniqueInput>
   }
 
+  export type StringFieldUpdateOperationsInput = {
+    set?: string
+  }
+
   export type EnumRoleFieldUpdateOperationsInput = {
     set?: Role
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
   }
 
   export type CartUpdateManyWithoutUserNestedInput = {
@@ -7997,6 +7030,14 @@ export namespace Prisma {
     deleteMany?: Enumerable<OrderScalarWhereInput>
   }
 
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type CartUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<Enumerable<CartCreateWithoutUserInput>, Enumerable<CartUncheckedCreateWithoutUserInput>>
     connectOrCreate?: Enumerable<CartCreateOrConnectWithoutUserInput>
@@ -8025,10 +7066,6 @@ export namespace Prisma {
     deleteMany?: Enumerable<OrderScalarWhereInput>
   }
 
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
-  }
-
   export type FloatFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -8051,17 +7088,17 @@ export namespace Prisma {
     update?: XOR<CartUpdateWithoutCartItemsInput, CartUncheckedUpdateWithoutCartItemsInput>
   }
 
+  export type UserCreateNestedOneWithoutCartsInput = {
+    create?: XOR<UserCreateWithoutCartsInput, UserUncheckedCreateWithoutCartsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCartsInput
+    connect?: UserWhereUniqueInput
+  }
+
   export type CartItemCreateNestedManyWithoutCartInput = {
     create?: XOR<Enumerable<CartItemCreateWithoutCartInput>, Enumerable<CartItemUncheckedCreateWithoutCartInput>>
     connectOrCreate?: Enumerable<CartItemCreateOrConnectWithoutCartInput>
     createMany?: CartItemCreateManyCartInputEnvelope
     connect?: Enumerable<CartItemWhereUniqueInput>
-  }
-
-  export type UserCreateNestedOneWithoutCartsInput = {
-    create?: XOR<UserCreateWithoutCartsInput, UserUncheckedCreateWithoutCartsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutCartsInput
-    connect?: UserWhereUniqueInput
   }
 
   export type CartItemUncheckedCreateNestedManyWithoutCartInput = {
@@ -8079,6 +7116,16 @@ export namespace Prisma {
     divide?: number
   }
 
+  export type UserUpdateOneWithoutCartsNestedInput = {
+    create?: XOR<UserCreateWithoutCartsInput, UserUncheckedCreateWithoutCartsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCartsInput
+    upsert?: UserUpsertWithoutCartsInput
+    disconnect?: boolean
+    delete?: boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<UserUpdateWithoutCartsInput, UserUncheckedUpdateWithoutCartsInput>
+  }
+
   export type CartItemUpdateManyWithoutCartNestedInput = {
     create?: XOR<Enumerable<CartItemCreateWithoutCartInput>, Enumerable<CartItemUncheckedCreateWithoutCartInput>>
     connectOrCreate?: Enumerable<CartItemCreateOrConnectWithoutCartInput>
@@ -8091,16 +7138,6 @@ export namespace Prisma {
     update?: Enumerable<CartItemUpdateWithWhereUniqueWithoutCartInput>
     updateMany?: Enumerable<CartItemUpdateManyWithWhereWithoutCartInput>
     deleteMany?: Enumerable<CartItemScalarWhereInput>
-  }
-
-  export type UserUpdateOneWithoutCartsNestedInput = {
-    create?: XOR<UserCreateWithoutCartsInput, UserUncheckedCreateWithoutCartsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutCartsInput
-    upsert?: UserUpsertWithoutCartsInput
-    disconnect?: boolean
-    delete?: boolean
-    connect?: UserWhereUniqueInput
-    update?: XOR<UserUpdateWithoutCartsInput, UserUncheckedUpdateWithoutCartsInput>
   }
 
   export type NullableIntFieldUpdateOperationsInput = {
@@ -8168,6 +7205,38 @@ export namespace Prisma {
     not?: NestedStringFilter | string
   }
 
+  export type NestedEnumRoleFilter = {
+    equals?: Role
+    in?: Enumerable<Role>
+    notIn?: Enumerable<Role>
+    not?: NestedEnumRoleFilter | Role
+  }
+
+  export type NestedDateTimeFilter = {
+    equals?: Date | string
+    in?: Enumerable<Date> | Enumerable<string> | Date | string
+    notIn?: Enumerable<Date> | Enumerable<string> | Date | string
+    lt?: Date | string
+    lte?: Date | string
+    gt?: Date | string
+    gte?: Date | string
+    not?: NestedDateTimeFilter | Date | string
+  }
+
+  export type NestedStringNullableFilter = {
+    equals?: string | null
+    in?: Enumerable<string> | string | null
+    notIn?: Enumerable<string> | string | null
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
+    contains?: string
+    startsWith?: string
+    endsWith?: string
+    not?: NestedStringNullableFilter | string | null
+  }
+
   export type NestedIntWithAggregatesFilter = {
     equals?: number
     in?: Enumerable<number> | number
@@ -8212,24 +7281,6 @@ export namespace Prisma {
     _max?: NestedStringFilter
   }
 
-  export type NestedEnumRoleFilter = {
-    equals?: Role
-    in?: Enumerable<Role>
-    notIn?: Enumerable<Role>
-    not?: NestedEnumRoleFilter | Role
-  }
-
-  export type NestedDateTimeFilter = {
-    equals?: Date | string
-    in?: Enumerable<Date> | Enumerable<string> | Date | string
-    notIn?: Enumerable<Date> | Enumerable<string> | Date | string
-    lt?: Date | string
-    lte?: Date | string
-    gt?: Date | string
-    gte?: Date | string
-    not?: NestedDateTimeFilter | Date | string
-  }
-
   export type NestedEnumRoleWithAggregatesFilter = {
     equals?: Role
     in?: Enumerable<Role>
@@ -8252,20 +7303,6 @@ export namespace Prisma {
     _count?: NestedIntFilter
     _min?: NestedDateTimeFilter
     _max?: NestedDateTimeFilter
-  }
-
-  export type NestedStringNullableFilter = {
-    equals?: string | null
-    in?: Enumerable<string> | string | null
-    notIn?: Enumerable<string> | string | null
-    lt?: string
-    lte?: string
-    gt?: string
-    gte?: string
-    contains?: string
-    startsWith?: string
-    endsWith?: string
-    not?: NestedStringNullableFilter | string | null
   }
 
   export type NestedStringNullableWithAggregatesFilter = {
@@ -8507,6 +7544,34 @@ export namespace Prisma {
     userId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
+  export type UserCreateWithoutCartsInput = {
+    username: string
+    email: string
+    role?: Role
+    createdAt?: Date | string
+    address?: string | null
+    password?: string | null
+    phoneNumber?: string | null
+    orders?: OrderCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutCartsInput = {
+    id?: number
+    username: string
+    email: string
+    role?: Role
+    createdAt?: Date | string
+    address?: string | null
+    password?: string | null
+    phoneNumber?: string | null
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutCartsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCartsInput, UserUncheckedCreateWithoutCartsInput>
+  }
+
   export type CartItemCreateWithoutCartInput = {
     productId: number
     createdAt?: Date | string
@@ -8528,26 +7593,32 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type UserCreateWithoutCartsInput = {
-    username: string
-    email: string
-    role?: Role
-    createdAt?: Date | string
-    orders?: OrderCreateNestedManyWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutCartsInput = {
-    id?: number
-    username: string
-    email: string
-    role?: Role
-    createdAt?: Date | string
-    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutCartsInput = {
-    where: UserWhereUniqueInput
+  export type UserUpsertWithoutCartsInput = {
+    update: XOR<UserUpdateWithoutCartsInput, UserUncheckedUpdateWithoutCartsInput>
     create: XOR<UserCreateWithoutCartsInput, UserUncheckedCreateWithoutCartsInput>
+  }
+
+  export type UserUpdateWithoutCartsInput = {
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    orders?: OrderUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCartsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CartItemUpsertWithWhereUniqueWithoutCartInput = {
@@ -8576,33 +7647,14 @@ export namespace Prisma {
     createdAt?: DateTimeFilter | Date | string
   }
 
-  export type UserUpsertWithoutCartsInput = {
-    update: XOR<UserUpdateWithoutCartsInput, UserUncheckedUpdateWithoutCartsInput>
-    create: XOR<UserCreateWithoutCartsInput, UserUncheckedCreateWithoutCartsInput>
-  }
-
-  export type UserUpdateWithoutCartsInput = {
-    username?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | Role
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    orders?: OrderUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutCartsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    username?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | Role
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
-  }
-
   export type UserCreateWithoutOrdersInput = {
     username: string
     email: string
     role?: Role
     createdAt?: Date | string
+    address?: string | null
+    password?: string | null
+    phoneNumber?: string | null
     carts?: CartCreateNestedManyWithoutUserInput
   }
 
@@ -8612,6 +7664,9 @@ export namespace Prisma {
     email: string
     role?: Role
     createdAt?: Date | string
+    address?: string | null
+    password?: string | null
+    phoneNumber?: string | null
     carts?: CartUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -8630,6 +7685,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     carts?: CartUpdateManyWithoutUserNestedInput
   }
 
@@ -8639,6 +7697,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     carts?: CartUncheckedUpdateManyWithoutUserNestedInput
   }
 

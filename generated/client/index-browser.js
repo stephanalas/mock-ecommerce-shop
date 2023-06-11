@@ -100,12 +100,6 @@ exports.Prisma.CartScalarFieldEnum = {
   userId: 'userId'
 };
 
-exports.Prisma.DinosaurScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  description: 'description'
-};
-
 exports.Prisma.OrderScalarFieldEnum = {
   id: 'id',
   status: 'status',
@@ -144,7 +138,10 @@ exports.Prisma.UserScalarFieldEnum = {
   username: 'username',
   email: 'email',
   role: 'role',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  address: 'address',
+  password: 'password',
+  phoneNumber: 'phoneNumber'
 };
 exports.Role = {
   USER: 'USER',
@@ -158,7 +155,6 @@ exports.Status = {
 };
 
 exports.Prisma.ModelName = {
-  Dinosaur: 'Dinosaur',
   User: 'User',
   Product: 'Product',
   CartItem: 'CartItem',

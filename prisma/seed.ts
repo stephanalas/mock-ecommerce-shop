@@ -1,6 +1,6 @@
 import { Prisma, PrismaClient } from '../generated/client/deno/edge.ts';
 import { config } from 'https://deno.land/std@0.163.0/dotenv/mod.ts';
-
+import { faker } from 'faker';
 const envVars = await config();
 
 const prisma = new PrismaClient({
@@ -11,21 +11,13 @@ const prisma = new PrismaClient({
 	},
 });
 
-prisma;
-// const dinosaurData: Prisma.DinosaurCreateInput[] = [
-//   {
-//     name: 'Aardonyx',
-//     description: 'An early stage in the evolution of sauropods.',
-//   },
-//   {
-//     name: 'Abelisaurus',
-//     description: "Abel's lizard has been reconstructed from a single skull.",
-//   },
-//   {
-//     name: 'Acanthopholis',
-//     description: "No, it's not a city in Greece.",
-//   },
-// ]
+async function init() {
+	const users: Prisma.UserCreateInput[] = [{
+		username: 'testUser',
+		email: 'test@user.com',
+		password: 'test123',
+	}];
+}
 
 /**
  * Seed the database.
